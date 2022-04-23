@@ -24,9 +24,29 @@ class Play extends Phaser.Scene {
             repeat: -1,
         });
         this.player.play("runner");
+
+        this.distance = 0;
+
+        let distanceConfig = {
+            fontFamily: 'Rockwell',
+            fontSize: '21px',
+            color: '#00FF33',
+            align: 'right',
+            padding: {
+                top: 10,
+                bottom: 10,
+            },
+            
+        }
+        this.distanceTraveled = this.add.text(600, 20, this.distance, distanceConfig);
+        this.timer = this.time.addEvent({delay: 100, callback: this.addDistance, callbackScope: this, loop: true});
     }
 
     update() {
         this.player.update();
+    }
+    addDistance() {
+        this.distance += 1;
+        this.distanceTraveled.text = this.distance;
     }
 }
