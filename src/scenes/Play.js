@@ -38,7 +38,7 @@ class Play extends Phaser.Scene {
             },
             
         }
-        this.distanceTraveled = this.add.text(600, 20, this.distance, distanceConfig);
+        this.distanceTraveled = this.add.text(600, 20, this.distance, distanceConfig); //can't figure out how to add text to this, or how to get the text to expand left rather than right
         this.timer = this.time.addEvent({delay: 100, callback: this.addDistance, callbackScope: this, loop: true});
     }
 
