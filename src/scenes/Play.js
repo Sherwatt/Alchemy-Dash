@@ -12,7 +12,10 @@ class Play extends Phaser.Scene {
         this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
 
-        this.player = new Alchemist(this, 250, 200, 'player').setOrigin(0.5, 0);
+        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+
+        this.player = new Alchemist(this, 150, 200, 'player').setOrigin(0.5, 0);
 
         this.anims.create({
             key: 'runner',
@@ -21,6 +24,9 @@ class Play extends Phaser.Scene {
             repeat: -1,
         });
         this.player.play("runner");
+    }
 
+    update() {
+        this.player.update();
     }
 }
