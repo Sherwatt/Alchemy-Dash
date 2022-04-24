@@ -5,9 +5,11 @@ class Play extends Phaser.Scene {
 
     preload() {
         // load images/tile sprites
-        this.load.image('rocket', './assets/rocket.png');
         this.load.image('starfield', './assets/starfield.png');
         this.load.image('ground', './assets/ground.png');
+
+        // load spritesheets
+        this.load.spritesheet('run', './assets/basic_run_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame:7});
     }
 
     create() {
@@ -22,9 +24,16 @@ class Play extends Phaser.Scene {
         this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0 ,0);
         this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);*/
-
+        
+        // run animation config
+        this.anims.create({
+            key: 'run',
+            frames: this.anims.generateFrameNumbers('run', {start: 0, end: 7, first: 0}),
+            frameRate: 12,
+            repeat: -1
+        })
         // add player
-        this.player = new player(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
+        this.player = new player(this, game.config.width/4, game.config.height - 3.5*borderUISize - borderPadding, 'run').setOrigin(0, 0);
         
 
         // define keys
