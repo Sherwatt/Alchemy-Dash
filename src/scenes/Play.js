@@ -5,7 +5,10 @@ class Play extends Phaser.Scene {
 
     preload() {
         // load images/tile sprites
-        this.load.image('starfield', './assets/starfield.png');
+        this.load.image('background1', './assets/1_background.png');
+        this.load.image('background2', './assets/2_background.png');
+        this.load.image('background3', './assets/3_background.png');
+        this.load.image('background4', './assets/4_background.png');
         this.load.image('ground', './assets/ground.png');
 
         // load spritesheets
@@ -14,8 +17,11 @@ class Play extends Phaser.Scene {
 
     create() {
         // place tile sprite
-        this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
-        this.ground = this.add.tileSprite(0, 0, 640, 66, 'ground').setOrigin(0, -6.74); 
+        this.background4 = this.add.tileSprite(0, 0, 640, 480, 'background4').setOrigin(0, 0);
+        this.background3 = this.add.tileSprite(0, 0, 640, 480, 'background3').setOrigin(0, 0);
+        this.background2 = this.add.tileSprite(0, 0, 640, 480, 'background2').setOrigin(0, 0);
+        this.background1 = this.add.tileSprite(0, 0, 640, 480, 'background1').setOrigin(0, 0);
+        this.ground = this.add.tileSprite(0, game.config.height-72, 640, 72, 'ground').setOrigin(0, 0); 
 
         // green UI background
         //this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
@@ -29,11 +35,11 @@ class Play extends Phaser.Scene {
         this.anims.create({
             key: 'run',
             frames: this.anims.generateFrameNumbers('run', {start: 0, end: 7, first: 0}),
-            frameRate: 12,
+            frameRate: 10,
             repeat: -1
         })
         // add player
-        this.player = new player(this, game.config.width/4, game.config.height - 3.5*borderUISize - borderPadding, 'run').setOrigin(0, 0);
+        this.player = new player(this, game.config.width/5, game.config.height - 155, 'run').setOrigin(0, 0);
         
 
         // define keys
@@ -70,8 +76,11 @@ class Play extends Phaser.Scene {
             this.scene.start("menuScene");
         }
 
-        this.starfield.tilePositionX += 4;  // update tile sprite
-        this.ground.tilePositionX += 6;
+        this.background1.tilePositionX += 4; // update tile sprite
+        this.background2.tilePositionX += 3.5;
+        this.background3.tilePositionX += 3;
+        this.background4.tilePositionX += 2.5; 
+        this.ground.tilePositionX += 5;
 
         if(!this.gameOver) {
             this.player.update();             // update p1
