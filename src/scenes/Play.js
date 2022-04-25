@@ -26,6 +26,7 @@ class Play extends Phaser.Scene {
 
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         this.ground = this.physics.add.staticGroup();
 
@@ -45,6 +46,7 @@ class Play extends Phaser.Scene {
         });
         this.player.play("runner");
 
+        //makes a single platform to show that we land on it
         this.ground.create(100, 400, 'platform');
 
         this.distance = 0;
@@ -66,6 +68,10 @@ class Play extends Phaser.Scene {
 
     update() {
         this.player.update();
+        //basic jumping ability, no animation for it yet
+        if(keySPACE.isDown && this.player.body.touching.down){
+            this.player.y -= 75;
+        }
     }
     addDistance() {
         this.distance += 1;
