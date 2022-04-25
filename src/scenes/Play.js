@@ -70,7 +70,7 @@ class Play extends Phaser.Scene {
         this.player.update();
         //basic jumping ability, no animation for it yet
         if(keySPACE.isDown && this.player.body.touching.down){
-            this.player.y -= 75;
+            this.player.setVelocityY(-300);
         }
     }
     addDistance() {
