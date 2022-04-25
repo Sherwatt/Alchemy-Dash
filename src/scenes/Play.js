@@ -6,32 +6,30 @@ class Play extends Phaser.Scene {
     preload() {
         this.load.audio('bounce', './assets/jumping.wav');
         this.load.image('platform', './assets/brick_tiles_1.png');
+        this.load.image('ground', './assets/ground.png');
+        this.load.image('background1', './assets/1_background.png');
+        this.load.image('background2', './assets/2_background.png');
+        this.load.image('background3', './assets/3_background.png');
+        this.load.image('background4', './assets/4_background.png');
         this.load.spritesheet('player', './assets/basic_run_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame: 7});
     }
     create() {
-        //adds in a group that'll respresent the ground and any possible platforms we might add
-        this.groundGroup = this.add.group({
-            //this adds all removed platforms to a pool
-            removeCallback: function(platform){
-                platform.scene.groundPool.add(platform)
-            }
-        });
-
-        //here's the pool
-        this.groundPool = this.add.group({
-            //when a platform is removed from the pool it goes into the active group
-            removeCallback: function(platform){
-                platform.scene.groundGroup.add(platform)
-            }
-        });
+        //tile sprite backgrounds
+        this.background4 = this.add.tileSprite(0, 0, 640, 480, 'background4').setOrigin(0, 0);
+        this.background3 = this.add.tileSprite(0, 0, 640, 480, 'background3').setOrigin(0, 0);
+        this.background2 = this.add.tileSprite(0, 0, 640, 480, 'background2').setOrigin(0, 0);
+        this.background1 = this.add.tileSprite(0, 0, 640, 480, 'background1').setOrigin(0, 0);
+        let grownd = this.add.tileSprite(0, game.config.height-72, 640, 72, 'ground').setOrigin(0, 0); 
 
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+        //The player won't land on the ground, instead he falls through it, why?
         this.ground = this.physics.add.staticGroup();
+        this.ground.create = (100, 640, grownd);
 
-        this.player = this.physics.add.sprite(100, 340, 'player');
+        this.player = this.physics.add.sprite(100, 300, 'player');
         this.player.setCollideWorldBounds(true);
 
         this.physics.add.collider(this.player, this.ground);
@@ -46,9 +44,6 @@ class Play extends Phaser.Scene {
             repeat: -1,
         });
         this.player.play("runner");
-
-        //makes a single platform to show that we land on it
-        this.ground.create(100, 400, 'platform');
 
         this.distance = 0;
 
