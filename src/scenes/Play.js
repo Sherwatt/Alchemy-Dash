@@ -4,7 +4,7 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        this.load.spritesheet('player', './assets/test_char.png', {frameWidth: 60, frameHeight: 62, startFrame: 0, endFrame: 3});
+        this.load.spritesheet('player', './assets/basic_run_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame: 7});
     }
     create() {
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
@@ -15,12 +15,12 @@ class Play extends Phaser.Scene {
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
 
-        this.player = new Alchemist(this, 150, 200, 'player').setOrigin(0.5, 0);
+        this.player = new Alchemist(this, 150, 200, 'player').setOrigin(0, 0);
 
         this.anims.create({
             key: 'runner',
-            frames: this.anims.generateFrameNumbers('player', { frames: [0, 1, 2, 1]}),
-            frameRate: 4,
+            frames: this.anims.generateFrameNumbers('player', {startFrame: 0, endFrame: 7}),
+            frameRate: 12,
             repeat: -1,
         });
         this.player.play("runner");
