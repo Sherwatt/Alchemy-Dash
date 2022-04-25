@@ -4,6 +4,7 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
+        this.load.audio('bounce', './assets/jumping.wav');
         this.load.image('platform', './assets/brick_tiles_1.png');
         this.load.spritesheet('player', './assets/basic_run_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame: 7});
     }
@@ -71,6 +72,7 @@ class Play extends Phaser.Scene {
         //basic jumping ability, no animation for it yet
         if(keySPACE.isDown && this.player.body.touching.down){
             this.player.setVelocityY(-300);
+            this.sound.play('bounce');
         }
     }
     addDistance() {
