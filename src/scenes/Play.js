@@ -76,11 +76,11 @@ class Play extends Phaser.Scene {
             this.scene.start("menuScene");
         }
 
-        this.background1.tilePositionX += 4; // update tile sprite
-        this.background2.tilePositionX += 3.5;
-        this.background3.tilePositionX += 3;
-        this.background4.tilePositionX += 2.5; 
-        this.ground.tilePositionX += 5;
+        this.background1.tilePositionX += 3.5; // update tile sprite
+        this.background2.tilePositionX += 3;
+        this.background3.tilePositionX += 2.5;
+        this.background4.tilePositionX += 2; 
+        this.ground.tilePositionX += 3.5;
 
         if(!this.gameOver) {
             this.player.update();             // update p1
