@@ -1,3 +1,13 @@
+let gameOptions = {
+    platformStartSpeed: 350,
+    spawnRange: [100, 350],
+    platformSizeRange: [50, 250],
+    playerGravity: 900,
+    jumpForce: 400,
+    playerStartPosition: 150,
+    jumps: 2
+}
+
 let config = {
     type: Phaser.CANVAS,
     width: 640,
@@ -6,11 +16,10 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: {y: 300},
             debug: false,
         }
     },
-    scene: [Play]
+    scene: [Menu, Play]
 }
 
 let game = new Phaser.Game(config);
@@ -18,4 +27,4 @@ let game = new Phaser.Game(config);
 let borderUISize = game.config.height / 20;
 let borderPadding = borderUISize / 3;
 
-let keyUP, keyDOWN, keySPACE;
+let keyLEFT, keyRIGHT, keySPACE, keyESC;
