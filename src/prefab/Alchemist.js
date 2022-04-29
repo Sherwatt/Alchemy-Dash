@@ -6,10 +6,10 @@ class Alchemist extends Phaser.GameObjects.Sprite {
     }
 
     update() {
-        if(keyUP.isDown && this.y >= borderUISize) {
-            this.y -= this.moveSpeed;
-        } else if (keyDOWN.isDown && this.y <= game.config.height - borderUISize - this.height){
-            this.y += this.moveSpeed;
+        if(keyLEFT.isDown && this.player.body.touching.down) {
+            this.x -= this.moveSpeed;
+        } else if (keyRIGHT.isDown && this.player.body.touching.down){
+            this.x += this.moveSpeed;
         }
     }
 }
