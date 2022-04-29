@@ -25,10 +25,6 @@ class Play extends Phaser.Scene {
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
-        //The player won't land on the ground, instead he falls through it, why?
-        let ground = this.physics.add.staticGroup();
-        ground.create = (100, 640, 'ground');
-
         //regular running animation
 
         this.anims.create({
@@ -63,14 +59,14 @@ class Play extends Phaser.Scene {
             }
         });
 
-        //adds in the player
-        this.player = this.physics.add.sprite(gameOptions.playerStartPosition, game.config.height / 2, "run");
-        this.player.setGravityY(gameOptions.playerGravity);
-        this.player.anims.play('run');
-
         this.playerJumps = 0;
 
         this.addPlatform(game.config.width, game.config.width / 2);
+
+        //adds in the player
+        this.player = this.physics.add.sprite(gameOptions.playerStartPosition, game.config.height/2, "run");
+        this.player.setGravityY(gameOptions.playerGravity);
+        this.player.anims.play('run');
 
         this.physics.add.collider(this.player, this.platformGroup);
 
