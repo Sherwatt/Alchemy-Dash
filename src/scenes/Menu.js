@@ -3,6 +3,9 @@ class Menu extends Phaser.Scene {
         super("menuScene");
     }
 
+    preload() {
+        this.load.audio('play', './assets/startgame_sfx.wav');
+    }
     create() {
         // menu text configuration
         let menuConfig = {
@@ -33,6 +36,7 @@ class Menu extends Phaser.Scene {
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+          this.sound.play('play');
           // Start game
           this.scene.start("playScene");
         }
