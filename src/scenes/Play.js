@@ -4,15 +4,23 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        this.load.audio('bounce', './assets/jumping.wav');
+        //the audio loads here
+        this.load.audio('bounce', './assets/jump_sfx.wav');
+        this.load.audio('fall', './assets/fall.wav')
+        this.load.audio('menu', './assets/backtomenu_sfx.wav')
+
+        //load images
+        this.load.image('ingredient', './assets/ing1.png');
         this.load.image('platform', './assets/ground_tile.png');
         this.load.image('background1', './assets/1_background.png');
         this.load.image('background2', './assets/2_background.png');
         this.load.image('background3', './assets/3_background.png');
         this.load.image('background4', './assets/4_background.png');
+
+        //load character and enemy spreadsheets
         this.load.spritesheet('player', './assets/basic_run_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame: 7});
         this.load.spritesheet('jump', './assets/jump_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame: 7});
-        this.load.image('ingredient', './assets/ing1.png');
+        
     }
     create() {
         //tile sprite backgrounds
@@ -135,11 +143,13 @@ class Play extends Phaser.Scene {
             }
             this.player.setVelocityY(gameOptions.jumpForce * -1);
             this.playerJumps ++;
+            this.sound.play('bounce')
         }
     }
     update() {
          // check key input for menu
          if(Phaser.Input.Keyboard.JustDown(keyESC)) {
+            this.sound.play('menu')
             this.scene.start("menuScene");
         }
         
@@ -150,6 +160,7 @@ class Play extends Phaser.Scene {
 
         // game over
         if(this.player.y > game.config.height){
+            this.sound.play('fall');
             this.scene.start("playScene");
         }
         this.player.x = gameOptions.playerStartPosition;
