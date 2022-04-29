@@ -3,8 +3,10 @@
 ******************************************************************/
 let gameOptions = {
     platformStartSpeed: 350,
-    spawnRange: [100, 350],
+    ingredientStartSpeed: 350,
+    spawnRange: [200, 700],
     platformSizeRange: [50, 250],
+    ingredientSizeRange: [20, 20],
     playerGravity: 900,
     jumpForce: 400,
     playerStartPosition: 150,
@@ -13,9 +15,9 @@ let gameOptions = {
 }
 
 let config = {
-    type: Phaser.CANVAS,
-    width: 640,
-    height: 480,
+    type: Phaser.AUTO,
+    width: 1280,
+    height: 520,
     autoCenter: true,
     physics: {
         default: 'arcade',
