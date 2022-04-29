@@ -12,6 +12,7 @@ class Play extends Phaser.Scene {
         this.load.image('background4', './assets/4_background.png');
         this.load.spritesheet('player', './assets/basic_run_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame: 7});
         this.load.spritesheet('jump', './assets/jump_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame: 7});
+        this.load.image('ingredient', './assets/ing1.png');
     }
     create() {
         //tile sprite backgrounds
@@ -107,6 +108,24 @@ class Play extends Phaser.Scene {
         platform.displayWidth = platformWidth;
         this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
     }
+    addIngredient(ingredientWidth, posX){
+        let ingredient;
+        if(this.ingredientPool.getLength()){
+            ingredient = this.ingredientPool.getFirst();
+            ingredient.x = posX;
+            ingredient.active = true;
+            ingredient.visible = true;
+            this.ingredientPool.remove(ingredient);
+        }
+        else{
+            ingredient = this.physics.add.sprite(posX, game.config.height -300, "ingredient");
+            ingredient.setImmovable(true);
+            ingredient.setVelocityX(gameOptions.ingredientStartSpeed * -1);
+            this.ingredientGroup.add(ingredient);
+        }
+        ingredient.displayWidth = ingredientWidth;
+        this.nextingredientDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
+    }
     // the player jumps when on the ground, or once in the air as long as there are jumps left and the first jump was on the ground
     jump(){
         if(this.player.body.touching.down || (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps)){
@@ -155,5 +174,16 @@ class Play extends Phaser.Scene {
     addDistance() {
         this.distance += 1;
         this.distanceTraveled.text = this.distance;
+    }
+    
+    checkCollision(char, ing) {
+        if (char.x < ing.x + ing.width && 
+            char.x + char.width > ing.x && 
+            char.y < ing.y + ing.height &&
+            char.height + char.y > ing.y) {
+                return true;
+        } else {
+            return false;
+        }
     }
 }
