@@ -8,6 +8,7 @@ class Play extends Phaser.Scene {
         this.load.audio('bounce', './assets/jump_sfx.wav');
         this.load.audio('fall', './assets/fall.wav')
         this.load.audio('menu', './assets/backtomenu_sfx.wav')
+        this.load.audio('dead', './assets/death_sfx.wav')
 
         //load images
         this.load.image('ingredient', './assets/ing1.png');
@@ -24,10 +25,10 @@ class Play extends Phaser.Scene {
     }
     create() {
         //tile sprite backgrounds
-        this.background4 = this.add.tileSprite(0, 0, 640, 480, 'background4').setOrigin(0, 0);
-        this.background3 = this.add.tileSprite(0, 0, 640, 480, 'background3').setOrigin(0, 0);
-        this.background2 = this.add.tileSprite(0, 0, 640, 480, 'background2').setOrigin(0, 0);
-        this.background1 = this.add.tileSprite(0, 0, 640, 480, 'background1').setOrigin(0, 0);
+        this.background4 = this.add.tileSprite(0, 0, 750, 500, 'background4').setOrigin(0, 0);
+        this.background3 = this.add.tileSprite(0, 0, 750, 500, 'background3').setOrigin(0, 0);
+        this.background2 = this.add.tileSprite(0, 0, 750, 500, 'background2').setOrigin(0, 0);
+        this.background1 = this.add.tileSprite(0, 0, 750, 500, 'background1').setOrigin(0, 0);
 
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -82,6 +83,22 @@ class Play extends Phaser.Scene {
         //checking for input
         this.input.keyboard.on("keydown-SPACE", this.jump, this);
 
+        //creating health
+        this.health = 100;
+
+        let healthConfig = {
+            fontFamily: 'Rockwell',
+            fontSize: '21px',
+            color: '#FF0023',
+            align: 'left',
+            padding: {
+                top: 10,
+                bottom: 10,
+            },
+        }
+        this.currentHealth = this.add.text(100, 20, this.health, healthConfig);
+
+        //loading the point system and adding the interface
         this.distance = 0;
 
         let distanceConfig = {
@@ -93,7 +110,6 @@ class Play extends Phaser.Scene {
                 top: 10,
                 bottom: 10,
             },
-            
         }
         this.distanceTraveled = this.add.text(600, 20, this.distance, distanceConfig); //can't figure out how to add text to this, or how to get the text to expand left rather than right
         this.timer = this.time.addEvent({delay: 100, callback: this.addDistance, callbackScope: this, loop: true});
@@ -161,10 +177,20 @@ class Play extends Phaser.Scene {
         // game over
         if(this.player.y > game.config.height){
             this.sound.play('fall');
-            this.scene.start("playScene");
+            this.health -= 20;
+            this.currentHealth.text = this.health
+            this.player = this.physics.add.sprite(gameOptions.playerStartPosition, game.config.height/2, "run");
+            this.player.setGravityY(gameOptions.playerGravity);
+            this.player.anims.play('run');
+            this.physics.add.collider(this.player, this.platformGroup);
+            
         }
         this.player.x = gameOptions.playerStartPosition;
- 
+        
+        if(this.health <= 0){
+            this.sound.play('dead');
+            this.scene.start("gameoverScene");
+        }
         // recycling platforms
         let minDistance = game.config.width;
         this.platformGroup.getChildren().forEach(function(platform){
