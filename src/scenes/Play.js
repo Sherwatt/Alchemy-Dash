@@ -6,9 +6,10 @@ class Play extends Phaser.Scene {
     preload() {
         //the audio loads here
         this.load.audio('bounce', './assets/jump_sfx.wav');
-        this.load.audio('fall', './assets/fall.wav')
-        this.load.audio('menu', './assets/backtomenu_sfx.wav')
-        this.load.audio('dead', './assets/death_sfx.wav')
+        this.load.audio('fall', './assets/fall.wav');
+        this.load.audio('menu', './assets/backtomenu_sfx.wav');
+        this.load.audio('dead', './assets/death_sfx.wav');
+        this.load.audio('hurt', './assets/damage_sfx.wav');
 
         //load images
         this.load.image('ingredient', './assets/ing1.png');
@@ -82,6 +83,9 @@ class Play extends Phaser.Scene {
 
         //checking for input
         this.input.keyboard.on("keydown-SPACE", this.jump, this);
+
+        //creates starting running speed
+        this.moveSpeed = 5;
 
         //creating health
         this.health = 100;
@@ -186,11 +190,19 @@ class Play extends Phaser.Scene {
             
         }
         this.player.x = gameOptions.playerStartPosition;
-        
+        //if all the player's health is drained, then the game over screen appears
         if(this.health <= 0){
             this.sound.play('dead');
             this.scene.start("gameoverScene");
         }
+
+        //gives the player left and right movement
+        if(keyLEFT.isDown) { //&& this.player.body.touching.down) {
+            this.player.setVelocityX(this.moveSpeed);
+        } else if (keyRIGHT.isDown) { //&& this.player.body.touching.down){
+            this.player.setVelocityX(this.moveSpeed);
+        }
+
         // recycling platforms
         let minDistance = game.config.width;
         this.platformGroup.getChildren().forEach(function(platform){
