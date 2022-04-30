@@ -22,6 +22,9 @@ class Death extends Phaser.Scene{
         deathConfig.fontStyle = 'italic';
         this.add.text(175, game.config.height/3 + 50, "Your search for immortality was futile.", deathConfig);
         this.add.text(210, game.config.height/2 + 50, "Press SPACE to try again\nESC to go back to the menu", deathConfig);
+
+        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     }
 
     update() {
