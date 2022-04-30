@@ -85,7 +85,7 @@ class Play extends Phaser.Scene {
         this.input.keyboard.on("keydown-SPACE", this.jump, this);
 
         //creates starting running speed
-        this.moveSpeed = 5;
+        this.moveSpeed = 600;
 
         //creating health
         this.health = 100;
@@ -190,6 +190,11 @@ class Play extends Phaser.Scene {
             
         }
         this.player.x = gameOptions.playerStartPosition;
+
+        //ensures that the correct animation will play when on the ground
+        if(this.player.body.touching.down) {
+            this.player.anims.play('run', true);
+        }
         //if all the player's health is drained, then the game over screen appears
         if(this.health <= 0){
             this.sound.play('dead');
@@ -198,9 +203,11 @@ class Play extends Phaser.Scene {
 
         //gives the player left and right movement
         if(keyLEFT.isDown) { //&& this.player.body.touching.down) {
-            this.player.setVelocityX(this.moveSpeed);
+            this.player.setAccelerationX(-this.moveSpeed);
         } else if (keyRIGHT.isDown) { //&& this.player.body.touching.down){
-            this.player.setVelocityX(this.moveSpeed);
+            this.player.setAccelerationX(this.moveSpeed);
+        } else {
+            this.player.setAccelerationX(0);
         }
 
         // recycling platforms
