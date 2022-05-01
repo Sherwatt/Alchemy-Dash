@@ -3,20 +3,25 @@ class Menu extends Phaser.Scene {
         super("menuScene");
     }
 
+    preload() {
+      this.load.audio('play', './assets/startgame_sfx.wav');
+    }
+
     create() {
         // menu text configuration
         let menuConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#ffdc8a',
-            color: '#863800',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5,
-            },
-            fixedWidth: 0
-        }
+          fontFamily: 'Fresca',
+          fontSize: '35px',
+          fontStyle: 'italic',
+          backgroundColor: '#ffdc8a',
+          color: '#070B7C',
+          align: 'center',
+          padding: {
+              top: 5,
+              bottom: 5,
+          },
+          fixedWidth: 0
+      }
         
         // show menu text
         this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'Alchemy Dash', menuConfig).setOrigin(0.5);
@@ -34,10 +39,7 @@ class Menu extends Phaser.Scene {
     update() {
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
           // Start game
-          game.settings = {
-            spaceshipSpeed: 3,
-            gameTimer: 60000    
-          }
+          this.sound.play('play');
           this.scene.start("playScene");
         }
       }

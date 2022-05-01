@@ -4,6 +4,12 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
+        //the audio loads here
+        this.load.audio('bounce', './assets/jump_sfx.wav');
+        this.load.audio('fall', './assets/fall.wav')
+        this.load.audio('menu', './assets/backtomenu_sfx.wav')
+        this.load.audio('dead', './assets/death_sfx.wav')
+
         // load images/tile sprites
         this.load.image('background1', './assets/1_background.png');
         this.load.image('background2', './assets/2_background.png');
@@ -45,6 +51,37 @@ class Play extends Phaser.Scene {
             frameRate: 10
         });
 
+        //creating health
+        this.health = 100;
+
+        let healthConfig = {
+            fontFamily: 'Rockwell',
+            fontSize: '21px',
+            color: '#FF0023',
+            align: 'left',
+            padding: {
+                top: 10,
+                bottom: 10,
+            },
+        }
+        this.currentHealth = this.add.text(100, 20, this.health, healthConfig);
+
+        //loading the point system and adding the interface
+        this.distance = 0;
+
+        let distanceConfig = {
+            fontFamily: 'Rockwell',
+            fontSize: '21px',
+            color: '#00FF33',
+            align: 'right',
+            padding: {
+                top: 10,
+                bottom: 10,
+            },
+        }
+        this.distanceTraveled = this.add.text(600, 20, this.distance, distanceConfig); //can't figure out how to add text to this, or how to get the text to expand left rather than right
+        this.timer = this.time.addEvent({delay: 100, callback: this.addDistance, callbackScope: this, loop: true});
+
 
         //Ingredient STUFF --------------------------------
         // group with all active ingredients.
@@ -70,9 +107,9 @@ class Play extends Phaser.Scene {
         
 
 
-        /*  PLATFORM STUFF --------------------------------
+        // Platforms with Gaps
         // group with all active platforms.
-        this.platformGroup = this.add.group({
+        /*this.platformGroup = this.add.group({
  
             // once a platform is removed, it's added to the pool
             removeCallback: function(platform){
@@ -87,20 +124,20 @@ class Play extends Phaser.Scene {
             removeCallback: function(platform){
                 platform.scene.platformGroup.add(platform)
             }
-        });
+        });*/
  
         // number of consecutive jumps made by the player
         this.playerJumps = 0;
  
         // adding a platform to the game, the arguments are platform width and x position
-        this.addPlatform(game.config.width, game.config.width / 2);
-        */
+        //this.addPlatform(game.config.width, game.config.width / 2);
+        
         // adding the player;
         this.player = this.physics.add.sprite(gameOptions.playerStartPosition, game.config.height / 2, "run");
         this.player.setGravityY(gameOptions.playerGravity);
         this.player.anims.play('run');
 
-        //Other platform stuff -------------------------------
+        //No gaps platform stuff -------------------------------
         // make ground tiles group
         const tileSize = 50;
         const SCALE = 2.3;
@@ -125,9 +162,6 @@ class Play extends Phaser.Scene {
         // checking for input
         this.input.keyboard.on("keydown-SPACE", this.jump, this);
         this.input.keyboard.on("keydown-ESC", this.menuReturn, this);
-        
-        // initialize score
-        this.p1Score = 0;
 
         // display score
         let scoreConfig = {
@@ -142,11 +176,29 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 100
         }
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
 
         // GAME OVER flag
         //this.gameOver = false;
     }
+    /*addPlatform(platformWidth, posX){
+        let platform;
+        if(this.platformPool.getLength()){
+            platform = this.platformPool.getFirst();
+            platform.x = posX;
+            platform.active = true;
+            platform.visible = true;
+            this.platformPool.remove(platform);
+        }
+        else{
+            platform = this.physics.add.sprite(posX, game.config.height * 0.8, "platform");
+            platform.setImmovable(true);
+            platform.setVelocityX(gameOptions.platformStartSpeed * -1);
+            this.platformGroup.add(platform);
+        }
+        platform.displayWidth = platformWidth;
+        this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
+    }*/
+
     addIngredient(ingredientWidth, posX){
         let ingredient;
         if(this.ingredientPool.getLength()){
@@ -174,6 +226,7 @@ class Play extends Phaser.Scene {
             }
             this.player.setVelocityY(gameOptions.jumpForce * -1);
             this.playerJumps ++;
+            this.sound.play('bounce');
         }
     }
 
@@ -181,11 +234,15 @@ class Play extends Phaser.Scene {
         this.scene.start("menuScene");
     }
 
-    resetIngredient() {
-
-    }
-
     update() {
+        // check key input for menu
+        if(Phaser.Input.Keyboard.JustDown(keyESC)) {
+            this.sound.play('menu')
+            this.scene.start("menuScene");
+        }
+
+        this.player.x = gameOptions.playerStartPosition;
+
         //move ground
         this.groundScroll.tilePositionX += 5;
 
@@ -196,19 +253,27 @@ class Play extends Phaser.Scene {
         this.background3.tilePositionX += 2.5;
         this.background4.tilePositionX += 2; 
 
-       /* if (ingredient.body.touching.down || ingredient.body.touching.left) {
-            this.ingredient.end;
-            
-        }
+       
 
         // game over
         if(this.player.y > game.config.height){
-            this.scene.start("playScene");
+            this.sound.play('fall');
+            this.health -= 20;
+            this.currentHealth.text = this.health
+            this.player = this.physics.add.sprite(gameOptions.playerStartPosition, game.config.height/2, "run");
+            this.player.setGravityY(gameOptions.playerGravity);
+            this.player.anims.play('run');
+            this.physics.add.collider(this.player, this.platformGroup);
+            
         }
-        this.player.x = gameOptions.playerStartPosition;
- /* PLATFORMMMMMSSSS
+        if(this.health <= 0){
+            this.sound.play('dead');
+            this.scene.start("gameoverScene");
+        }
+
+        // PLATFORMS
         // recycling platforms
-        let minDistance = game.config.width;
+        /*let minDistance = game.config.width;
         this.platformGroup.getChildren().forEach(function(platform){
             let platformDistance = game.config.width - platform.x - platform.displayWidth / 2;
             minDistance = Math.min(minDistance, platformDistance);
@@ -216,7 +281,7 @@ class Play extends Phaser.Scene {
                 this.platformGroup.killAndHide(platform);
                 this.platformGroup.remove(platform);
             }
-        }, this);
+        }, this);*
  
         // adding new platforms
         if(minDistance > this.nextPlatformDistance){
@@ -224,6 +289,7 @@ class Play extends Phaser.Scene {
             this.addPlatform(nextPlatformWidth, game.config.width + nextPlatformWidth / 2);
         }*/
 
+        // INGREDIENTS
         // recycling ingredients
         let minDistance = game.config.width;
         this.ingredientGroup.getChildren().forEach(function(ingredient){
@@ -234,8 +300,8 @@ class Play extends Phaser.Scene {
             if (this.checkCollision(this.player, ingredient)) {
                 this.ingredientGroup.killAndHide(ingredient);
                 this.ingredientGroup.remove(ingredient);
-                this.p1Score++;
-                this.scoreLeft.text = this.p1Score;
+                this.distance += 50;
+                this.distanceTraveled.text = this.distance;
             }
 
 
@@ -250,6 +316,11 @@ class Play extends Phaser.Scene {
             var nextIngredientWidth = Phaser.Math.Between(gameOptions.ingredientSizeRange[0], gameOptions.ingredientSizeRange[1]);
             this.addIngredient(nextIngredientWidth, game.config.width + nextIngredientWidth / 2);
         }
+    }
+
+    addDistance() {
+        this.distance += 1;
+        this.distanceTraveled.text = this.distance;
     }
 
     checkCollision(char, ing) {
