@@ -9,7 +9,11 @@ class Play extends Phaser.Scene {
         this.load.audio('fall', './assets/fall.wav');
         this.load.audio('menu', './assets/backtomenu_sfx.wav');
         this.load.audio('dead', './assets/death_sfx.wav');
+<<<<<<< Updated upstream
         this.load.audio('hurt', './assets/damage_sfx.wav');
+=======
+        this.load.audio('grab', './assets/grab_ingredient.wav');
+>>>>>>> Stashed changes
 
         //load images
         this.load.image('ingredient', './assets/ing1.png');
@@ -25,12 +29,21 @@ class Play extends Phaser.Scene {
         
     }
     create() {
+<<<<<<< Updated upstream
         //tile sprite backgrounds
+=======
+        // place tile sprite
+>>>>>>> Stashed changes
         this.background4 = this.add.tileSprite(0, 0, 750, 500, 'background4').setOrigin(0, 0);
         this.background3 = this.add.tileSprite(0, 0, 750, 500, 'background3').setOrigin(0, 0);
         this.background2 = this.add.tileSprite(0, 0, 750, 500, 'background2').setOrigin(0, 0);
         this.background1 = this.add.tileSprite(0, 0, 750, 500, 'background1').setOrigin(0, 0);
+<<<<<<< Updated upstream
 
+=======
+        
+        // define keys
+>>>>>>> Stashed changes
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -117,6 +130,66 @@ class Play extends Phaser.Scene {
         }
         this.distanceTraveled = this.add.text(600, 20, this.distance, distanceConfig); //can't figure out how to add text to this, or how to get the text to expand left rather than right
         this.timer = this.time.addEvent({delay: 100, callback: this.addDistance, callbackScope: this, loop: true});
+<<<<<<< Updated upstream
+=======
+
+
+        //Ingredient STUFF --------------------------------
+        // group with all active ingredients.
+        this.ingredientGroup = this.add.group({
+ 
+            // once an ingredient is removed, it's added to the pool
+            removeCallback: function(ingredient){
+                ingredient.scene.ingredientPool.add(ingredient)
+            }
+        });
+ 
+        // pool
+        this.ingredientPool = this.add.group({
+ 
+            // once an ingredient is removed from the pool, it's added to the active ingredients group
+            removeCallback: function(ingredient){
+                ingredient.scene.ingredientGroup.add(ingredient)
+            }
+        });
+        
+        // Platforms with Gaps
+        // group with all active platforms.
+        this.platformGroup = this.add.group({
+ 
+            // once a platform is removed, it's added to the pool
+            removeCallback: function(platform){
+                platform.scene.platformPool.add(platform)
+            }
+        });
+ 
+        // pool
+        this.platformPool = this.add.group({
+ 
+            // once a platform is removed from the pool, it's added to the active platforms group
+            removeCallback: function(platform){
+                platform.scene.platformGroup.add(platform)
+            }
+        });
+ 
+        // number of consecutive jumps made by the player
+        this.playerJumps = 0;
+ 
+        // adding a platform to the game, the arguments are platform width and x position
+        this.addPlatform(game.config.width, game.config.width / 2);
+        
+        // adding the player;
+        this.player = this.physics.add.sprite(gameOptions.playerStartPosition, game.config.height / 2, "run");
+        this.player.setGravityY(gameOptions.playerGravity);
+        this.player.anims.play('run');
+        
+        // setting collisions between the player and the platform group
+        this.physics.add.collider(this.player, this.platformGroup);
+        //this.physics.add.collider(this.player, this.ingredientGroup);
+ 
+        // checking for input
+        this.input.keyboard.on("keydown-SPACE", this.jump, this);
+>>>>>>> Stashed changes
     }
     addPlatform(platformWidth, posX){
         let platform;
@@ -137,6 +210,10 @@ class Play extends Phaser.Scene {
         platform.displayWidth = platformWidth;
         this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
     }
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     addIngredient(ingredientWidth, posX){
         let ingredient;
         if(this.ingredientPool.getLength()){
@@ -153,11 +230,11 @@ class Play extends Phaser.Scene {
             this.ingredientGroup.add(ingredient);
         }
         ingredient.displayWidth = ingredientWidth;
-        this.nextingredientDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
+        this.nextingredientDistance = Phaser.Math.Between(gameOptions.ingredientSpawnRange[0], gameOptions.ingredientSpawnRange[1]);
     }
     // the player jumps when on the ground, or once in the air as long as there are jumps left and the first jump was on the ground
     jump(){
-        if(this.player.body.touching.down || (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps)){
+        if(this.player.body.touching.down || this.playerJumps < gameOptions.jumps){
             this.player.anims.play('jump');
             if(this.player.body.touching.down){
                 this.playerJumps = 0;
@@ -167,13 +244,26 @@ class Play extends Phaser.Scene {
             this.sound.play('bounce')
         }
     }
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
     update() {
          // check key input for menu
          if(Phaser.Input.Keyboard.JustDown(keyESC)) {
             this.sound.play('menu')
             this.scene.start("menuScene");
         }
+<<<<<<< Updated upstream
         
+=======
+
+        this.player.x = gameOptions.playerStartPosition;
+
+        if (this.player.body.touching.down && this.player.anims.isPlaying != 'run') {this.player.anims.play('run', true);}
+
+>>>>>>> Stashed changes
         this.background1.tilePositionX += 3.5; // update tile sprite
         this.background2.tilePositionX += 3;
         this.background3.tilePositionX += 2.5;
@@ -188,7 +278,7 @@ class Play extends Phaser.Scene {
             this.player.setGravityY(gameOptions.playerGravity);
             this.player.anims.play('run');
             this.physics.add.collider(this.player, this.platformGroup);
-            
+            this.playerJumps = 0;
         }
         this.player.x = gameOptions.playerStartPosition;
 
@@ -226,6 +316,38 @@ class Play extends Phaser.Scene {
         if(minDistance > this.nextPlatformDistance){
             var nextPlatformWidth = Phaser.Math.Between(gameOptions.platformSizeRange[0], gameOptions.platformSizeRange[1]);
             this.addPlatform(nextPlatformWidth, game.config.width + nextPlatformWidth / 2);
+<<<<<<< Updated upstream
+=======
+        }
+
+        // INGREDIENTS
+        // recycling ingredients
+        let miniDistance = game.config.width;
+        this.ingredientGroup.getChildren().forEach(function(ingredient){
+            let ingredientDistance = game.config.width - ingredient.x - ingredient.displayWidth /2;
+            miniDistance = Math.min(miniDistance, ingredientDistance);
+
+
+            if (this.checkCollision(this.player, ingredient)) {
+                this.ingredientGroup.killAndHide(ingredient);
+                this.ingredientGroup.remove(ingredient);
+                this.distance += 50;
+                this.distanceTraveled.text = this.distance;
+                this.sound.play('grab');
+            }
+
+
+            if(ingredient.x < - ingredient.displayWidth / 2){
+                this.ingredientGroup.killAndHide(ingredient);
+                this.ingredientGroup.remove(ingredient);
+            }
+        }, this);
+ 
+        // adding new ingredients
+        if(minDistance > this.nextingredientDistance){
+            var nextIngredientWidth = Phaser.Math.Between(gameOptions.ingredientSizeRange[0], gameOptions.ingredientSizeRange[1]);
+            this.addIngredient(nextIngredientWidth, game.config.width + nextIngredientWidth / 2);
+>>>>>>> Stashed changes
         }
     }
     addDistance() {
