@@ -1,6 +1,12 @@
 let gameOptions = {
     platformStartSpeed: 350,
+<<<<<<< Updated upstream
     spawnRange: [100, 350],
+=======
+    ingredientStartSpeed: 350,
+    spawnRange: [100, 350],
+    ingredientSpawnRange: [80, 500],
+>>>>>>> Stashed changes
     platformSizeRange: [75, 250],
     playerGravity: 900,
     jumpForce: 400,
@@ -9,7 +15,11 @@ let gameOptions = {
 }
 
 let config = {
+<<<<<<< Updated upstream
     type: Phaser.AUTO,
+=======
+    type: Phaser.CANVAS,
+>>>>>>> Stashed changes
     width: 750,
     height: 500,
     autoCenter: true,
