@@ -10,6 +10,10 @@ class Death extends Phaser.Scene{
 
     //scene displays a little message, I'll add a way for it to display your score in a bit
     create() {
+
+        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        
         let deathConfig = {
             fontFamily: 'Didot',
             fontSize: '35px',
