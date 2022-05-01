@@ -21,7 +21,7 @@ class Play extends Phaser.Scene {
 
         //load character and enemy spreadsheets
         this.load.spritesheet('player', './assets/basic_run_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame: 7});
-        this.load.spritesheet('jump', './assets/jump_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame: 7});
+        this.load.spritesheet('jumping', './assets/jump_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame: 7});
         
     }
     create() {
@@ -49,7 +49,7 @@ class Play extends Phaser.Scene {
 
         this.anims.create({
             key: 'jump',
-            frames: this.anims.generateFrameNumbers('jump', {start: 0, end: 7, first: 0}),
+            frames: this.anims.generateFrameNumbers('jumping', {start: 0, end: 7, first: 0}),
             frameRate: 10
         });
 
@@ -130,6 +130,7 @@ class Play extends Phaser.Scene {
         else{
             platform = this.physics.add.sprite(posX, game.config.height * 0.8, "platform");
             platform.setImmovable(true);
+            platform.setGravityY(false);
             platform.setVelocityX(gameOptions.platformStartSpeed * -1);
             this.platformGroup.add(platform);
         }
