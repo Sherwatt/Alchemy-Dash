@@ -9,9 +9,10 @@ let gameOptions = {
 }
 
 let config = {
-    type: Phaser.CANVAS,
+    type: Phaser.AUTO,
     width: 750,
     height: 500,
+    autoCenter: true,
     backgroundColor: '#B7410E',
     physics: {
         default: 'arcade',
