@@ -10,8 +10,8 @@ let gameOptions = {
     playerGravity: 900,
     jumpForce: 400,
     playerStartPosition: 150,
-    jumps: 2
-
+    jumps: 2,
+    moveSpeed: 2
 }
 
 let config = {
@@ -36,4 +36,4 @@ let borderUISize = game.config.height / 20;
 let borderPadding = borderUISize / 3;
 
 // reserve keyboard variables
-let keyLEFT, keyRIGHT, keySPACE, keyESC;
+let keyLEFT, keyRIGHT, keyA, keyD, keySPACE, keyESC;

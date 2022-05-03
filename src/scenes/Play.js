@@ -34,6 +34,8 @@ class Play extends Phaser.Scene {
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         
@@ -235,13 +237,13 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-        // check key input for menu
-        if(Phaser.Input.Keyboard.JustDown(keyESC)) {
-            this.sound.play('menu')
-            this.scene.start("menuScene");
+        // check key input for movement
+        if((keyRIGHT.isDown || keyD.isDown) && this.player.x < 700) {
+            this.player.x += gameOptions.moveSpeed;
+        } else if ((keyLEFT.isDown || keyA.isDown)  && this.player.x > 50) {
+            this.player.x -= gameOptions.moveSpeed;
         }
-
-        this.player.x = gameOptions.playerStartPosition;
+        //this.player.x = gameOptions.playerStartPosition;
 
         //move ground
         this.groundScroll.tilePositionX += 5;
@@ -256,7 +258,7 @@ class Play extends Phaser.Scene {
        
 
         // game over
-        if(this.player.y > game.config.height){
+        if(this.player.y > game.config.height) {
             this.sound.play('fall');
             this.health -= 20;
             this.currentHealth.text = this.health
@@ -300,7 +302,7 @@ class Play extends Phaser.Scene {
             if (this.checkCollision(this.player, ingredient)) {
                 this.ingredientGroup.killAndHide(ingredient);
                 this.ingredientGroup.remove(ingredient);
-                this.distance += 50;
+                this.distance += 20;
                 this.distanceTraveled.text = this.distance;
             }
 
