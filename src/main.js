@@ -21,15 +21,13 @@ let gameOptions = {
     jumpForce: 400,
     playerStartPosition: 150,
     jumps: 2,
-    moveSpeed: 600
+    moveSpeed: 2
 }
 
 let config = {
     type: Phaser.CANVAS,
     width: 1280,
     height: 520,
-    width: 750,
-    height: 500,
     autoCenter: true,
     backgroundColor: '#B7410E',
     autoCenter: true,

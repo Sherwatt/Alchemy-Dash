@@ -46,9 +46,9 @@ class Play extends Phaser.Scene {
             loop: true,
         }
 
-        let music = this.sound.add('music');
+        this.music = this.sound.add('music');
 
-        music.play(musicConfig);
+        this.music.play(musicConfig);
 
         // run animation config
         this.anims.create({
@@ -226,7 +226,7 @@ class Play extends Phaser.Scene {
 
     menuReturn() {
         this.scene.start("menuScene");
-        music.destroy();
+        this.music.stop();
     }
 
     update() {
@@ -264,7 +264,7 @@ class Play extends Phaser.Scene {
         if(this.health <= 0){
             this.sound.play('dead');
             this.scene.start("gameoverScene");
-            this.music.destroy();
+            this.music.stop();
         }
 
         // INGREDIENTS
