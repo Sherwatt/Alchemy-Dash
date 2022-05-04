@@ -6,9 +6,10 @@ class Play extends Phaser.Scene {
     preload() {
         //the audio loads here
         this.load.audio('bounce', './assets/jump_sfx.wav');
-        this.load.audio('fall', './assets/fall.wav')
-        this.load.audio('menu', './assets/backtomenu_sfx.wav')
-        this.load.audio('dead', './assets/death_sfx.wav')
+        this.load.audio('fall', './assets/fall.wav');
+        this.load.audio('menu', './assets/backtomenu_sfx.wav');
+        this.load.audio('dead', './assets/death_sfx.wav');
+        this.load.audio('music', './assets/background_music.wav');
 
         // load images/tile sprites
         this.load.image('background1', './assets/1_background.png');
@@ -40,6 +41,15 @@ class Play extends Phaser.Scene {
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         
+        let musicConfig = {
+            volume: 0.7,
+            loop: true,
+        }
+
+        let music = this.sound.add('music');
+
+        music.play(musicConfig);
+
         // run animation config
         this.anims.create({
             key: 'run',
@@ -131,32 +141,9 @@ class Play extends Phaser.Scene {
         // adding an ingredient to the game, the arguments are ingredient width and x position
         this.addIngredient(20, 50);
         
-
-
-        // Platforms with Gaps
-        // group with all active platforms.
-        /*this.platformGroup = this.add.group({
- 
-            // once a platform is removed, it's added to the pool
-            removeCallback: function(platform){
-                platform.scene.platformPool.add(platform)
-            }
-        });
- 
-        // pool
-        this.platformPool = this.add.group({
- 
-            // once a platform is removed from the pool, it's added to the active platforms group
-            removeCallback: function(platform){
-                platform.scene.platformGroup.add(platform)
-            }
-        });*/
  
         // number of consecutive jumps made by the player
         this.playerJumps = 0;
- 
-        // adding a platform to the game, the arguments are platform width and x position
-        //this.addPlatform(game.config.width, game.config.width / 2);
         
         // adding the player;
         this.player = this.physics.add.sprite(gameOptions.playerStartPosition, game.config.height / 2, "run");
@@ -181,49 +168,12 @@ class Play extends Phaser.Scene {
         
         
         // setting collisions between the player and the platform group
-        //this.physics.add.collider(this.player, this.platformGroup);
         this.physics.add.collider(this.player, this.ground);
-        //this.physics.add.collider(this.player, this.ingredientGroup);
  
         // checking for input
         this.input.keyboard.on("keydown-SPACE", this.jump, this);
         this.input.keyboard.on("keydown-ESC", this.menuReturn, this);
-
-        // display score
-        let scoreConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#ffdc8a',
-            color: '#863800',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5,
-            },
-            fixedWidth: 100
-        }
-
-        // GAME OVER flag
-        //this.gameOver = false;
     }
-    /*addPlatform(platformWidth, posX){
-        let platform;
-        if(this.platformPool.getLength()){
-            platform = this.platformPool.getFirst();
-            platform.x = posX;
-            platform.active = true;
-            platform.visible = true;
-            this.platformPool.remove(platform);
-        }
-        else{
-            platform = this.physics.add.sprite(posX, game.config.height * 0.8, "platform");
-            platform.setImmovable(true);
-            platform.setVelocityX(gameOptions.platformStartSpeed * -1);
-            this.platformGroup.add(platform);
-        }
-        platform.displayWidth = platformWidth;
-        this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
-    }*/
 
     addIngredient(ingredientWidth, posX){
         let ingredient;
@@ -276,6 +226,7 @@ class Play extends Phaser.Scene {
 
     menuReturn() {
         this.scene.start("menuScene");
+        music.destroy();
     }
 
     update() {
@@ -313,25 +264,8 @@ class Play extends Phaser.Scene {
         if(this.health <= 0){
             this.sound.play('dead');
             this.scene.start("gameoverScene");
+            this.music.destroy();
         }
-
-        // PLATFORMS
-        // recycling platforms
-        /*let minDistance = game.config.width;
-        this.platformGroup.getChildren().forEach(function(platform){
-            let platformDistance = game.config.width - platform.x - platform.displayWidth / 2;
-            minDistance = Math.min(minDistance, platformDistance);
-            if(platform.x < - platform.displayWidth / 2){
-                this.platformGroup.killAndHide(platform);
-                this.platformGroup.remove(platform);
-            }
-        }, this);*
- 
-        // adding new platforms
-        if(minDistance > this.nextPlatformDistance){
-            var nextPlatformWidth = Phaser.Math.Between(gameOptions.platformSizeRange[0], gameOptions.platformSizeRange[1]);
-            this.addPlatform(nextPlatformWidth, game.config.width + nextPlatformWidth / 2);
-        }*/
 
         // INGREDIENTS
         // recycling ingredients
