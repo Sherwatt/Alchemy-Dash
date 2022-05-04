@@ -253,7 +253,7 @@ class Play extends Phaser.Scene {
             this.enemyPool.remove(enemy);
         }
         else{
-            enemy = this.physics.add.sprite(posX, Phaser.Math.Between(40, game.config.height), "enemy");
+            enemy = this.physics.add.sprite(posX, Phaser.Math.Between(40, game.config.height-70), "enemy");
             enemy.setImmovable(true);
             enemy.setVelocityX(gameOptions.enemyStartSpeed * -1);
             this.enemyGroup.add(enemy);
