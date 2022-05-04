@@ -17,6 +17,7 @@ class Play extends Phaser.Scene {
         this.load.image('background4', './assets/4_background.png');
         this.load.image('platform', './assets/ground_tile.png');
         this.load.image('ingredient', './assets/ing1.png');
+        this.load.image('enemy', './assets/enemy.png');
 
         // load spritesheets
         this.load.spritesheet('run', './assets/basic_run_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame:7});
@@ -83,6 +84,29 @@ class Play extends Phaser.Scene {
         }
         this.distanceTraveled = this.add.text(600, 20, this.distance, distanceConfig); //can't figure out how to add text to this, or how to get the text to expand left rather than right
         this.timer = this.time.addEvent({delay: 100, callback: this.addDistance, callbackScope: this, loop: true});
+
+
+//Enemy STUFF --------------------------------
+        // group with all active enemies.
+        this.enemyGroup = this.add.group({
+ 
+            // once an enemy is removed, it's added to the pool
+            removeCallback: function(enemy){
+                enemy.scene.enemyPool.add(enemy)
+            }
+        });
+ 
+        // pool
+        this.enemyPool = this.add.group({
+ 
+            // once an enemy is removed from the pool, it's added to the active enemies group
+            removeCallback: function(enemy){
+                enemy.scene.enemyGroup.add(enemy)
+            }
+        });
+ 
+        // adding an enemy to the game, the arguments are enemy width and x position
+        this.addEnemy(20, 50);
 
 
         //Ingredient STUFF --------------------------------
@@ -219,6 +243,24 @@ class Play extends Phaser.Scene {
         ingredient.displayWidth = ingredientWidth;
         this.nextingredientDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
     }
+    addEnemy(enemyWidth, posX){
+        let enemy;
+        if(this.enemyPool.getLength()){
+            enemy = this.enemyPool.getFirst();
+            enemy.x = posX;
+            enemy.active = true;
+            enemy.visible = true;
+            this.enemyPool.remove(enemy);
+        }
+        else{
+            enemy = this.physics.add.sprite(posX, Phaser.Math.Between(40, game.config.height), "enemy");
+            enemy.setImmovable(true);
+            enemy.setVelocityX(gameOptions.enemyStartSpeed * -1);
+            this.enemyGroup.add(enemy);
+        }
+        enemy.displayWidth = enemyWidth;
+        this.nextenemyDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
+    }
     // the player jumps when on the ground, or once in the air as long as there are jumps left and the first jump was on the ground
     jump(){
         if(this.player.body.touching.down || (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps)){
@@ -317,6 +359,33 @@ class Play extends Phaser.Scene {
         if(minDistance > this.nextingredientDistance){
             var nextIngredientWidth = Phaser.Math.Between(gameOptions.ingredientSizeRange[0], gameOptions.ingredientSizeRange[1]);
             this.addIngredient(nextIngredientWidth, game.config.width + nextIngredientWidth / 2);
+        }
+        // ENEMIES
+        // recycling enemiess
+        this.enemyGroup.getChildren().forEach(function(enemy){
+            let enemyDistance = game.config.width - enemy.x - enemy.displayWidth /2;
+            minDistance = Math.min(minDistance, enemyDistance);
+
+
+            if (this.checkCollision(this.player, enemy)) {
+                this.enemyGroup.killAndHide(enemy);
+                this.enemyGroup.remove(enemy);
+                this.sound.play('fall');
+                this.health -= 20;
+                this.currentHealth.text = this.health
+            }
+
+
+            if(enemy.x < - enemy.displayWidth / 2){
+                this.enemyGroup.killAndHide(enemy);
+                this.enemyGroup.remove(enemy);
+            }
+        }, this);
+ 
+        // adding new enemies
+        if(minDistance > this.nextenemyDistance){
+            var nextEnemyWidth = Phaser.Math.Between(gameOptions.enemySizeRange[0], gameOptions.enemySizeRange[1]);
+            this.addEnemy(nextEnemyWidth, game.config.width + nextEnemyWidth / 2);
         }
     }
 

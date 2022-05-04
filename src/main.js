@@ -1,12 +1,22 @@
 /*******************************************************************
- *  ALCHEMY DASH
+ * ALCHEMY DASH
+
+ * Jeremy Dahlberg
+ * Lyza Stevens
+ * Eamon Sherris-Watt
+ 
+ * CREATIVE TILT
+ * In our endles runner, we have made use of randomly generated collectable and enemy placement.
+ * In our endless runner, there are several backgrounds that scroll at different speeds, creating a parralax effect.
 ******************************************************************/
 let gameOptions = {
     platformStartSpeed: 350,
     ingredientStartSpeed: 350,
+    enemyStartSpeed: 350,
     spawnRange: [200, 700],
     platformSizeRange: [75, 250],
     ingredientSizeRange: [20, 20],
+    enemySizeRange: [20, 20],
     playerGravity: 900,
     jumpForce: 400,
     playerStartPosition: 150,
