@@ -10,20 +10,18 @@
  * In our endless runner, there are several backgrounds that scroll at different speeds, creating a parralax effect.
 ******************************************************************/
 let gameOptions = {
-    platformStartSpeed: 350,
     ingredientStartSpeed: 350,
     enemyStartSpeed: 350,
     spawnRange: [200, 700],
     spawnRange: [100, 350],
     ingredientSpawnRange: [80, 500],
-    platformSizeRange: [75, 250],
     ingredientSizeRange: [20, 20],
     enemySizeRange: [20, 20],
     playerGravity: 900,
     jumpForce: 400,
     playerStartPosition: 150,
     jumps: 2,
-    moveSpeed: 2
+    moveSpeed: 600
 }
 
 let config = {
