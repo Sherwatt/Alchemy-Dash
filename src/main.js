@@ -12,13 +12,10 @@
 let gameOptions = {
     platformStartSpeed: 350,
     ingredientStartSpeed: 350,
-<<<<<<< Updated upstream
     enemyStartSpeed: 350,
     spawnRange: [200, 700],
-=======
     spawnRange: [100, 350],
     ingredientSpawnRange: [80, 500],
->>>>>>> Stashed changes
     platformSizeRange: [75, 250],
     ingredientSizeRange: [20, 20],
     enemySizeRange: [20, 20],
@@ -31,14 +28,11 @@ let gameOptions = {
 
 let config = {
     type: Phaser.CANVAS,
-<<<<<<< Updated upstream
     width: 1280,
     height: 520,
-=======
     width: 750,
     height: 500,
     autoCenter: true,
->>>>>>> Stashed changes
     backgroundColor: '#B7410E',
     autoCenter: true,
     physics: {
