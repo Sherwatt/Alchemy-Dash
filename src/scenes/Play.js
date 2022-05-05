@@ -17,12 +17,12 @@ class Play extends Phaser.Scene {
         this.load.image('background3', './assets/3_background.png');
         this.load.image('background4', './assets/4_background.png');
         this.load.image('platform', './assets/ground_tile.png');
-        this.load.image('ingredient', './assets/ing1.png');
         this.load.image('enemy', './assets/enemy.png');
 
         // load spritesheets
         this.load.spritesheet('run', './assets/basic_run_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame:7});
         this.load.spritesheet('jump', './assets/jump_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame:7});
+        this.load.spritesheet('ingredient', './assets/mushroom_anim.png', {frameWidth: 32, frameWidth: 32, startFrame: 0, endFrame:3});
     }
 
     create() {
@@ -62,6 +62,13 @@ class Play extends Phaser.Scene {
             key: 'jump',
             frames: this.anims.generateFrameNumbers('jump', {start: 0, end: 7, first: 0}),
             frameRate: 10
+        });
+        // mushroom animation config
+        this.anims.create({
+            key: 'mushroom',
+            frames: this.anims.generateFrameNumbers('ingredient', {start: 0, end: 3, first: 0}),
+            frameRate: 8,
+            repeat: -1
         });
 
         //creating health
@@ -153,18 +160,18 @@ class Play extends Phaser.Scene {
         //No gaps platform stuff -------------------------------
         // make ground tiles group
         const tileSize = 50;
-        const SCALE = 2.3;
+        const SCALE = 2;
 
         this.ground = this.add.group();
         for(let i = 0; i < game.config.width; i += tileSize) {
-            let groundTile = this.physics.add.sprite(i, game.config.height - 58 - tileSize, 'platform').setScale(SCALE).setOrigin(0);
+            let groundTile = this.physics.add.sprite(i, game.config.height - 30 - tileSize, 'platform').setScale(SCALE).setOrigin(0);
             groundTile.body.immovable = true;
             groundTile.body.allowGravity = false;
             this.ground.add(groundTile);
         }
 
         // put another tile sprite above the ground tiles
-        this.groundScroll = this.add.tileSprite(0, game.config.height - 58 - tileSize, game.config.width, tileSize, 'platform').setScale(SCALE).setOrigin(0);
+        this.groundScroll = this.add.tileSprite(0, game.config.height - 30 - tileSize, game.config.width, tileSize, 'platform').setScale(SCALE).setOrigin(0);
         
         
         // setting collisions between the player and the platform group
@@ -177,20 +184,23 @@ class Play extends Phaser.Scene {
 
     addIngredient(ingredientWidth, posX){
         let ingredient;
+        
         if(this.ingredientPool.getLength()){
             ingredient = this.ingredientPool.getFirst();
+            ingredient.anims.play('mushroom');
             ingredient.x = posX;
-            ingredient.active = true;
+            ingredient.active = true;  
             ingredient.visible = true;
             this.ingredientPool.remove(ingredient);
         }
         else{
-            ingredient = this.physics.add.sprite(posX, game.config.height -300, "ingredient");
+            ingredient = this.physics.add.sprite(posX, game.config.height -240, "ingredient");
+            ingredient.anims.play('mushroom');
             ingredient.setImmovable(true);
             ingredient.setVelocityX(gameOptions.ingredientStartSpeed * -1);
             this.ingredientGroup.add(ingredient);
         }
-        ingredient.displayWidth = ingredientWidth;
+        //ingredient.displayWidth = ingredientWidth;
         this.nextingredientDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
     }
     addEnemy(enemyWidth, posX){
@@ -236,8 +246,7 @@ class Play extends Phaser.Scene {
         } else if ((keyLEFT.isDown || keyA.isDown)  && this.player.x > 50) {
             this.player.x -= gameOptions.moveSpeed;
         }
-        //this.player.x = gameOptions.playerStartPosition;
-
+        
         //move ground
         this.groundScroll.tilePositionX += 5;
 
@@ -288,7 +297,7 @@ class Play extends Phaser.Scene {
                 this.ingredientGroup.remove(ingredient);
             }
         }, this);
- 
+        
         // adding new ingredients
         if(minDistance > this.nextingredientDistance){
             var nextIngredientWidth = Phaser.Math.Between(gameOptions.ingredientSizeRange[0], gameOptions.ingredientSizeRange[1]);

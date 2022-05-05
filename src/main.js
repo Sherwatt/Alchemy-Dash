@@ -10,7 +10,7 @@
  * In our endless runner, there are several backgrounds that scroll at different speeds, creating a parralax effect.
 ******************************************************************/
 let gameOptions = {
-    ingredientStartSpeed: 350,
+    ingredientStartSpeed: 300,
     enemyStartSpeed: 350,
     spawnRange: [200, 700],
     spawnRange: [100, 350],
@@ -26,10 +26,9 @@ let gameOptions = {
 
 let config = {
     type: Phaser.CANVAS,
-    width: 1280,
-    height: 520,
+    width: 960,
+    height: 480,
     autoCenter: true,
-    backgroundColor: '#B7410E',
     autoCenter: true,
     physics: {
         default: 'arcade',
