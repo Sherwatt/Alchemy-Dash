@@ -18,12 +18,12 @@ class Play extends Phaser.Scene {
         this.load.image('background3', './assets/3_background.png');
         this.load.image('background4', './assets/4_background.png');
         this.load.image('platform', './assets/ground_tile.png');
-        this.load.image('enemy', './assets/enemy.png');
 
         // load spritesheets
         this.load.spritesheet('run', './assets/basic_run_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame:7});
         this.load.spritesheet('jump', './assets/jump_cycle.png', {frameWidth: 64, frameHeight: 96, startFrame: 0, endFrame:7});
         this.load.spritesheet('ingredient', './assets/mushroom_anim.png', {frameWidth: 32, frameWidth: 32, startFrame: 0, endFrame:3});
+        this.load.spritesheet('enemy', './assets/bad_mushroom_anim.png', {frameWidth: 32, frameWidth: 32, startFrame: 0, endFrame:3});
     }
 
     create() {
@@ -67,6 +67,12 @@ class Play extends Phaser.Scene {
         this.anims.create({
             key: 'mushroom',
             frames: this.anims.generateFrameNumbers('ingredient', {start: 0, end: 3, first: 0}),
+            frameRate: 8,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'bad_mushroom',
+            frames: this.anims.generateFrameNumbers('enemy', {start: 0, end: 3, first: 0}),
             frameRate: 8,
             repeat: -1
         });
@@ -207,6 +213,7 @@ class Play extends Phaser.Scene {
         let enemy;
         if(this.enemyPool.getLength()){
             enemy = this.enemyPool.getFirst();
+            enemy.anims.play('bad_mushroom');
             enemy.x = posX;
             enemy.active = true;
             enemy.visible = true;
@@ -214,6 +221,7 @@ class Play extends Phaser.Scene {
         }
         else{
             enemy = this.physics.add.sprite(posX, Phaser.Math.Between(40, game.config.height-70), "enemy");
+            enemy.anims.play('bad_mushroom');
             enemy.setImmovable(true);
             enemy.setVelocityX(gameOptions.enemyStartSpeed * -1);
             this.enemyGroup.add(enemy);

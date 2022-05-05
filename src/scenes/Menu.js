@@ -39,6 +39,7 @@ class Menu extends Phaser.Scene {
         menuConfig.strokeThickness = 5;
         menuConfig.fontSize = '24px';
         this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding *23, 'Press ESC to return to the menu', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/7, game.config.height/4 + borderUISize + borderPadding *23, 'Collect purple mushrooms\nAvoid green mushrooms', menuConfig).setOrigin(0.5);
 
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
