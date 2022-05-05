@@ -9,6 +9,7 @@ class Play extends Phaser.Scene {
         this.load.audio('fall', './assets/fall.wav');
         this.load.audio('menu', './assets/backtomenu_sfx.wav');
         this.load.audio('dead', './assets/death_sfx.wav');
+        this.load.audio('grab', './assets/grab_ingredient.wav');
         this.load.audio('music', './assets/background_music.wav');
 
         // load images/tile sprites
@@ -31,7 +32,6 @@ class Play extends Phaser.Scene {
         this.background3 = this.add.tileSprite(0, 0, 1280, 720, 'background3').setOrigin(0, 0);
         this.background2 = this.add.tileSprite(0, 0, 1280, 720, 'background2').setOrigin(0, 0);
         this.background1 = this.add.tileSprite(0, 0, 1280, 720, 'background1').setOrigin(0, 0);
-        //this.ground = this.add.tileSprite(0, game.config.height-72, 640, 72, 'ground').setOrigin(0, 0); 
         
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -75,31 +75,31 @@ class Play extends Phaser.Scene {
         this.health = 100;
 
         let healthConfig = {
-            fontFamily: 'Rockwell',
-            fontSize: '21px',
-            color: '#FF0023',
+            fontFamily: 'Romulus',
+            fontSize: '44px',
+            color: '#A1266E',
             align: 'left',
             padding: {
-                top: 10,
-                bottom: 10,
+                top: 5,
+                bottom: 5,
             },
         }
-        this.currentHealth = this.add.text(100, 20, this.health, healthConfig);
+        this.currentHealth = this.add.text(50, 20, 'HEALTH: ' + `${this.health}`, healthConfig);
 
         //loading the point system and adding the interface
         this.distance = 0;
 
         let distanceConfig = {
-            fontFamily: 'Rockwell',
-            fontSize: '21px',
-            color: '#00FF33',
+            fontFamily: 'Romulus',
+            fontSize: '44px',
+            color: '#26A15B',
             align: 'right',
             padding: {
                 top: 10,
                 bottom: 10,
             },
         }
-        this.distanceTraveled = this.add.text(600, 20, this.distance, distanceConfig); //can't figure out how to add text to this, or how to get the text to expand left rather than right
+        this.distanceTraveled = this.add.text(800, 20, `${this.distance}` + ' FT', distanceConfig); //can't figure out how to add text to this, or how to get the text to expand left rather than right
         this.timer = this.time.addEvent({delay: 100, callback: this.addDistance, callbackScope: this, loop: true});
 
 
@@ -263,7 +263,7 @@ class Play extends Phaser.Scene {
         if(this.player.y > game.config.height) {
             this.sound.play('fall');
             this.health -= 20;
-            this.currentHealth.text = this.health
+            this.currentHealth.text = 'HEALTH: ' + `${this.health}`
             this.player = this.physics.add.sprite(gameOptions.playerStartPosition, game.config.height/2, "run");
             this.player.setGravityY(gameOptions.playerGravity);
             this.player.anims.play('run');
@@ -288,7 +288,8 @@ class Play extends Phaser.Scene {
                 this.ingredientGroup.killAndHide(ingredient);
                 this.ingredientGroup.remove(ingredient);
                 this.distance += 20;
-                this.distanceTraveled.text = this.distance;
+                this.distanceTraveled.text = `${this.distance}` + ' FT';
+                this.sound.play('grab');
             }
 
 
@@ -315,7 +316,7 @@ class Play extends Phaser.Scene {
                 this.enemyGroup.remove(enemy);
                 this.sound.play('fall');
                 this.health -= 20;
-                this.currentHealth.text = this.health
+                this.currentHealth.text = 'HEALTH: ' + `${this.health}`
             }
 
 
@@ -334,7 +335,7 @@ class Play extends Phaser.Scene {
 
     addDistance() {
         this.distance += 1;
-        this.distanceTraveled.text = this.distance;
+        this.distanceTraveled.text = `${this.distance}` + ' FT';
     }
 
     checkCollision(char, ing) {

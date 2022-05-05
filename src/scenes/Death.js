@@ -6,22 +6,30 @@ class Death extends Phaser.Scene{
     preload() {
         this.load.audio('play', './assets/startgame_sfx.wav');
         this.load.audio('menu', './assets/backtomenu_sfx.wav');
+        this.load.image('forest', './assets/forest.png');
     }
 
     //scene displays a little message, I'll add a way for it to display your score in a bit
     create() {
+        this.background_img = this.add.tileSprite(0, 0, 1280, 720, 'forest').setOrigin(0, 0);
         let deathConfig = {
-            fontFamily: 'Didot',
-            fontSize: '35px',
-            fontStyle: 'bold',
-            color: '#000000',
+            fontFamily: 'Alagard',
+            fontSize: '64px',
+            stroke: '#141144',
+            strokeThickness: 8,
+            color: '#CBDA73',
             align: 'center',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 0
         }
-        this.add.text(275, game.config.height/4, "YOU DIED", deathConfig);
+        this.add.text(game.config.width/2, game.config.height/3, "YOU DIED", deathConfig).setOrigin(0.5);
         deathConfig.fontSize = '28px';
         deathConfig.fontStyle = 'italic';
-        this.add.text(175, game.config.height/3 + 50, "Your search for immortality was futile.", deathConfig);
-        this.add.text(210, game.config.height/2 + 50, "Press SPACE to try again\nESC to go back to the menu", deathConfig);
+        this.add.text(game.config.width/2, game.config.height/3 + 60, "Your search for immortality was futile.", deathConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 100, "Press SPACE to try again\n ESC to go back to the menu", deathConfig).setOrigin(0.5);
 
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);

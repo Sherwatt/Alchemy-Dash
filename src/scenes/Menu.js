@@ -15,10 +15,10 @@ class Menu extends Phaser.Scene {
         // menu text configuration
         let menuConfig = {
           fontFamily: 'Alagard',
-          fontSize: '35px',
-          //fontStyle: 'italic',
-          //backgroundColor: '#ffdc8a',
-          color: '#ffdc8a',
+          fontSize: '100px',
+          stroke: '#141144',
+          strokeThickness: 8,
+          color: '#CBDA73',
           align: 'center',
           padding: {
               top: 5,
@@ -29,10 +29,16 @@ class Menu extends Phaser.Scene {
         
         // show menu text
         this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'Alchemy Dash', menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2+50, 'Use ←→ arrows to move\n& SPACE to jump', menuConfig).setOrigin(0.5);
+        menuConfig.fontSize = '32px';
         menuConfig.fontFamily = 'Romulus';
-        menuConfig.color = '#863800';
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding +100, 'Press SPACE to start\nPress ESC to return to the menu', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/1.55, 'Use ←→ arrows to move\n& SPACE to jump', menuConfig).setOrigin(0.5);
+        menuConfig.color = '#62DAC5';
+        menuConfig.fontSize = '50px';
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding * 15, 'Press SPACE to start', menuConfig).setOrigin(0.5);
+        menuConfig.color = '#EDA2A7';
+        menuConfig.strokeThickness = 5;
+        menuConfig.fontSize = '24px';
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding *23, 'Press ESC to return to the menu', menuConfig).setOrigin(0.5);
 
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);

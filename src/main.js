@@ -5,6 +5,8 @@
  * Lyza Stevens
  * Eamon Sherris-Watt
  
+ * completed on 5/4/2022
+ 
  * CREATIVE TILT
  * In our endles runner, we have made use of randomly generated collectable and enemy placement.
  * In our endless runner, there are several backgrounds that scroll at different speeds, creating a parralax effect.
