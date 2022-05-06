@@ -118,7 +118,7 @@ class Play extends Phaser.Scene {
         this.currentHealth = this.add.text(50, 20, 'HEALTH: ' + `${this.health}`, healthConfig);
 
         //loading the point system and adding the interface
-        this.distance = 0;
+        //this.distance = 0;
 
         let distanceConfig = {
             fontFamily: 'Romulus',
@@ -130,7 +130,7 @@ class Play extends Phaser.Scene {
                 bottom: 10,
             },
         }
-        this.distanceTraveled = this.add.text(800, 20, `${this.distance}` + ' FT', distanceConfig); //can't figure out how to add text to this, or how to get the text to expand left rather than right
+        this.distanceTraveled = this.add.text(game.config.width - borderPadding -10*borderUISize, 20, 'SCORE: ' + `${(Math.round(gameOptions.distance/10))*5}`, distanceConfig); //can't figure out how to add text to this, or how to get the text to expand left rather than right
         this.timer = this.time.addEvent({delay: 100, callback: this.addDistance, callbackScope: this, loop: true});
 
 
@@ -250,6 +250,7 @@ class Play extends Phaser.Scene {
             enemy.anims.play('bad_mushroom', true);
             enemy.setImmovable(true);
             enemy.setVelocityX(gameOptions.enemyStartSpeed * -1);
+            gameOptions.enemyStartSpeed += 25; 
             this.enemyGroup.add(enemy);
         }
         //enemy.displayWidth = enemyWidth;
@@ -318,8 +319,8 @@ class Play extends Phaser.Scene {
             if (this.checkCollision(this.player, ingredient)) {
                 this.ingredientGroup.killAndHide(ingredient);
                 this.ingredientGroup.remove(ingredient);
-                this.distance += 20;
-                this.distanceTraveled.text = `${this.distance}` + ' FT';
+                gameOptions.distance += 50;
+                this.distanceTraveled.text = "SCORE: " + `${(Math.round(gameOptions.distance/10))*5}`;
                 this.sound.play('grab');
             }
 
@@ -362,8 +363,8 @@ class Play extends Phaser.Scene {
     }
 
     addDistance() {
-        this.distance += 1;
-        this.distanceTraveled.text = `${this.distance}` + ' FT';
+        gameOptions.distance += 1;
+        this.distanceTraveled.text = 'SCORE: ' + `${(Math.round(gameOptions.distance/10))*5}`;
     }
 
     checkCollision(char, ing) {

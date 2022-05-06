@@ -6,6 +6,7 @@ class Menu extends Phaser.Scene {
     preload() {
       this.load.audio('play', './assets/startgame_sfx.wav');
       this.load.image('forest', './assets/forest.png');
+      this.load.image('controls', './assets/controls.jpg');
     }
 
     create() {
@@ -29,26 +30,35 @@ class Menu extends Phaser.Scene {
         
         // show menu text
         this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'Alchemy Dash', menuConfig).setOrigin(0.5);
-        menuConfig.fontSize = '32px';
-        menuConfig.fontFamily = 'Romulus';
-        this.add.text(game.config.width/2, game.config.height/1.55, 'Use ←→ arrows to move\n& SPACE to jump', menuConfig).setOrigin(0.5);
         menuConfig.color = '#62DAC5';
         menuConfig.fontSize = '50px';
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding * 15, 'Press SPACE to start', menuConfig).setOrigin(0.5);
+        menuConfig.fontFamily = 'Romulus';
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding * 10, 'Press SPACE to start', menuConfig).setOrigin(0.5);
         menuConfig.color = '#EDA2A7';
         menuConfig.strokeThickness = 5;
         menuConfig.fontSize = '24px';
         this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding *23, 'Press ESC to return to the menu', menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/7, game.config.height/4 + borderUISize + borderPadding *23, 'Collect purple mushrooms\nAvoid green mushrooms', menuConfig).setOrigin(0.5);
 
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        // hide controls image
+        this.show_controls = false;
+        this.controls_image = this.add.tileSprite(0,0,game.config.width, game.config.height, 'controls').setOrigin(0,0);
+        this.controls_image.alpha = 0;
     }
 
     update() {
-        if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+        if(!this.show_controls && Phaser.Input.Keyboard.JustDown(keySPACE)) {
+          // hide menu screen & unhide controls
+          this.controls_image.alpha = 1;
+          this.background_img.alpha = 0;
+          this.show_controls = true;
+          this.sound.play('play');
+        }
+        else if (this.show_controls && Phaser.Input.Keyboard.JustDown(keySPACE)) {
           // Start game
           this.sound.play('play');
           this.scene.start("playScene");

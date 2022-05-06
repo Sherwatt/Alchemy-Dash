@@ -23,7 +23,8 @@ let gameOptions = {
     jumpForce: 400,
     playerStartPosition: 150,
     jumps: 2,
-    moveSpeed: 2
+    moveSpeed: 2,
+    distance: 0
 }
 
 let config = {
