@@ -283,7 +283,7 @@ class Play extends Phaser.Scene {
         }
         
         //move ground
-        this.groundScroll.tilePositionX += 4;
+        this.groundScroll.tilePositionX += 5;
 
         if (this.player.body.touching.down && this.player.anims.isPlaying != 'run') {this.player.anims.play('run', true);}
 
